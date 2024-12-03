@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Quarkus REST API Projesi
 
@@ -38,4 +39,3 @@ Bu proje, **Quarkus** kullanılarak geliştirilmiş basit bir REST API uygulamas
         ],
         "total": 55
     }
-
