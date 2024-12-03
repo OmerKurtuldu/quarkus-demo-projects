@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package org.gib;
+
+service SquareService {
+  rpc CalculateSquares (SquareRequest) returns (SquareResponse);
+}
+
+message SquareRequest {
+  int32 number = 1;
+}
+
+message SquareResult {
+  int32 number = 1;
+  int32 square = 2;
+}
+
+message SquareResponse {
+  repeated SquareResult results = 1;
+  int64 total = 2;
+}
