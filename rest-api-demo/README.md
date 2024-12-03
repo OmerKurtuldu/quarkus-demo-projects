@@ -1,66 +1,41 @@
-# code-with-quarkus
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+# Quarkus REST API Projesi
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+Bu proje, **Quarkus** kullanılarak geliştirilmiş basit bir REST API uygulamasıdır. Proje, aşağıdaki iki ana işlevi sağlamaktadır:
+1. **Hello Endpoint**: Basit bir "Hello" mesajı döner.
+2. **Square Calculation Endpoint**: Verilen sayıya kadar olan sayıların karelerini hesaplar ve bunların toplamını döner.
 
-## Running the application in dev mode
+## 📚 Kullanılan Teknolojiler
+- **Quarkus**: Java tabanlı, hızlı ve bulut yerel bir framework.
+- **Jakarta REST API (JAX-RS)**: RESTful servisler için standart bir API.
+- **JSON**: Veri iletiminde kullanılan format.
 
-You can run your application in dev mode that enables live coding using:
 
-```shell script
-./mvnw compile quarkus:dev
-```
+## 🚀 API Endpoints
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+### 1. `/hello`
+- **Method**: `GET`
+- **Açıklama**: "Hello from Quarkus REST" mesajını döner.
 
-## Packaging and running the application
+### 2. `/square`
+- **Method**: `POST`
+- **Açıklama**: Gönderilen sayıya kadar olan sayıların karelerini ve bunların toplamını döner.
+- **Request Body**:
+  ```json
+  {
+    "number": 5
+  }
 
-The application can be packaged using:
+- **Response Body**:
+    ```json
+    {
+        "results": [
+            {"number": 1, "square": 1},
+            {"number": 2, "square": 4},
+            {"number": 3, "square": 9},
+            {"number": 4, "square": 16},
+            {"number": 5, "square": 25}
+        ],
+        "total": 55
+    }
 
-```shell script
-./mvnw package
-```
-
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/code-with-quarkus-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
