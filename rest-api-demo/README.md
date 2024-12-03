@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 # Quarkus REST API Projesi
 
