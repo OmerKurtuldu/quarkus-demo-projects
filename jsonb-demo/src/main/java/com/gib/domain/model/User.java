@@ -4,8 +4,7 @@ import io.quarkus.hibernate.reactive.panache.Panache;
 import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import com.gib.domain.converter.JsonNodeConverter;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +19,7 @@ public class User {
     private String email;
 
     @Column(columnDefinition = "jsonb")
-    @JdbcTypeCode(SqlTypes.JSON)
+    @Convert(converter = JsonNodeConverter.class)
     private JsonNode additionalInfo;
 
     // Getters and Setters

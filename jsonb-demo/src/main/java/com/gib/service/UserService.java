@@ -5,22 +5,37 @@ import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.hibernate.reactive.mutiny.Mutiny;
+import org.jboss.logging.Logger;
 import java.util.List;
 
 @ApplicationScoped
 public class UserService {
 
+    private static final Logger LOG = Logger.getLogger(UserService.class);
+
     @Inject
     Mutiny.SessionFactory sf;
 
     public Uni<User> createUser(User user) {
-        return sf.withTransaction((session, tx) -> session.persist(user))
-                .map(v -> user);
+        LOG.info("Kullanıcı oluşturma başladı: " + user.getUsername());
+        return sf.withTransaction((session, tx) -> {
+            if (user.getId() != null) {
+                user.setId(null); // ID'yi null yaparak yeni kayıt olmasını sağlıyoruz
+            }
+            return session.persist(user)
+                    .chain(session::flush)
+                    .map(v -> user);
+        });
     }
 
     public Uni<List<User>> getAllUsers() {
+        LOG.info("Tüm kullanıcılar getiriliyor...");
         return sf.withSession(session -> 
-            session.createQuery("FROM User", User.class).getResultList()
+            session.createQuery("FROM User", User.class)
+                .getResultList()
+                .onItem().invoke(users -> 
+                    LOG.info("Bulunan kullanıcı sayısı: " + users.size())
+                )
         );
     }
 
@@ -35,9 +50,10 @@ public class UserService {
                     user.setUsername(updatedUser.getUsername());
                     user.setEmail(updatedUser.getEmail());
                     user.setAdditionalInfo(updatedUser.getAdditionalInfo());
-                    return session.persist(user).map(v -> user);
+                    return session.persist(user)
+                            .chain(session::flush)
+                            .map(v -> user);
                 })
-
         );
     }
 
@@ -45,7 +61,9 @@ public class UserService {
         return sf.withTransaction((session, tx) ->
             session.find(User.class, id)
                 .onItem().ifNotNull().transformToUni(user ->
-                    session.remove(user).map(v -> true)
+                    session.remove(user)
+                        .chain(session::flush)
+                        .map(v -> true)
                 )
                 .onItem().ifNull().continueWith(false)
         );
