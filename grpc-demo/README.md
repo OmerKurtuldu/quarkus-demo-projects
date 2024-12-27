@@ -1,73 +1,69 @@
-# grpc-demo
+# gRPC ve REST API Projesi
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Bu proje, Quarkus kullanarak basit bir gRPC ve REST API örneği sunmaktadır. İki farklı servis yer almaktadır: biri REST API ile çalışırken diğeri gRPC protokollerini kullanır. Bu projede, `GreetingService` ve `SquareService` adında iki basit servis bulunmaktadır. 
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Proje Yapısı
 
-## Running the application in dev mode
+### REST API Servisi
+Bu servis, `GreetingService` adında basit bir REST API sunmaktadır ve HTTP üzerinden gelen istekleri işler.
 
-You can run your application in dev mode that enables live coding using:
+**Endpoint:**
+- `GET /hello` - "Hello from Quarkus REST" mesajını döndürür.
 
-```shell script
-./mvnw compile quarkus:dev
-```
+### gRPC Servisi
+Bu servis, `GreetingService` ve `SquareService` adı altında iki farklı gRPC servisi sunmaktadır.
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+#### GreetingService
+`GreetingService` servisi, "Hello from gRPC" mesajını döndürür.
 
-## Packaging and running the application
+#### SquareService
+`SquareService` servisi, verilen bir sayıya kadar olan sayıların karelerini hesaplar ve toplamını döndürür.
 
-The application can be packaged using:
+**gRPC Methodları:**
+- `calculateSquares(SquareRequest)` - Sayıya kadar olan kareleri hesaplar.
+- `hello(Empty)` - Basit bir "Hello from gRPC" mesajı döner.
 
-```shell script
-./mvnw package
-```
+## Kurulum
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+### Gereksinimler
+- Java 17 veya daha yüksek bir sürüm
+- Maven 3.8.1 veya daha yüksek bir sürüm
+- Quarkus 2.x
+- Protobuf dosyasını kullanabilmek için gerekli araçlar
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+### Projeyi Çalıştırmak
+1. Bu projeyi bir dizine klonlayın:
+   ```bash
+   git clone https://github.com/username/grpc-rest-project.git
+   cd grpc-rest-project
+2. Maven bağımlılıklarını yükleyin:
+   ```bash
+   mvn clean install
+3. Quarkus uygulamasını çalıştırın:
+   ```bash
+   mvn clean install
 
-If you want to build an _über-jar_, execute the following command:
+Uygulama aşağıdaki portlarda çalışacaktır:
+  - REST API: http://localhost:8080
+  - gRPC: localhost:9000
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+### Postman ile gRPC İstek Gönderme
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+1. **Postman Uygulamasını Açın** ve **New** butonuna tıklayın, ardından **Request** seçeneğini seçin.
 
-## Creating a native executable
+2. **gRPC İstek Türünü Seçin**:
+   - **URL** kısmına `localhost:9000` yazın.
+   - Üstteki menüden **gRPC** seçeneğini seçin.
 
-You can create a native executable using:
+3. **Proto Dosyasını Yükleyin**:
+   - Sağ üst köşede, **Body** sekmesinin altında **gRPC** sekmesine tıklayın.
+   - **Choose Proto File** butonuna tıklayarak `greeting.proto` veya `square.proto` dosyasını seçin.
 
-```shell script
-./mvnw package -Dnative
-```
+4. **Servis ve Metod Seçin**:
+   - **GreetingService** servisini seçin ve `hello` metodunu çağırın.
+   - **SquareService** için, `calculateSquares` metodunu seçin ve gerekli parametreyi (örneğin, `{ "number": 5 }`) girin.
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+5. **İstek Gönderin**:
+   - **Send** butonuna tıklayın ve yanıtı inceleyin.
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
 
-You can then execute your native executable with: `./target/grpc-demo-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- REST JSON-B ([guide](https://quarkus.io/guides/rest#json-serialisation)): JSON-B serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### gRPC
-
-Create your first gRPC service
-
-[Related guide section...](https://quarkus.io/guides/grpc-getting-started)
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
